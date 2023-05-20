@@ -32,7 +32,7 @@ class _TabBarIndicator extends BoxPainter {
         Rect.fromCenter(
           center: customOffset,
           width: configuration.size!.width,
-          height: 4,
+          height: 3,
         ),
         topLeft: Radius.circular(radius),
         topRight: Radius.circular(radius),

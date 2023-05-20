@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/utils/colors.dart';
-import 'package:to_do/utils/dimension.dart';
 
 class CustomBottomsheet {
   const CustomBottomsheet({
@@ -16,7 +15,7 @@ class CustomBottomsheet {
       context: context,
       builder: (ctx) => SizedBox(
         width: double.infinity,
-        height: SizeConfig.screenHeight, // testing
+        // height: SizeConfig.screenHeight, // testing
         child: Padding(
           // padding: const EdgeInsets.all(12),
           padding: const EdgeInsets.only(top: 12, left: 12, right: 12),

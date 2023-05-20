@@ -40,7 +40,7 @@ class AppThemeData {
     bottomSheetTheme:
         const BottomSheetThemeData(backgroundColor: kBackGroundColor),
     textTheme: GoogleFonts.robotoTextTheme().copyWith(
-      labelLarge: const TextStyle(color: kPrimaryColor),
+      labelLarge: const TextStyle(color: kPrimaryTextColor),
       titleLarge: const TextStyle(color: kPrimaryTextColor),
       titleSmall: const TextStyle(color: kPrimaryTextColor),
     ),
