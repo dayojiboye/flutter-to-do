@@ -48,7 +48,7 @@ class _TasksScreenState extends State<TasksScreen> {
               onTap: () {},
               child: const Icon(
                 Icons.circle_outlined,
-                size: 32,
+                size: 30,
               ),
             ),
             title: Text(
@@ -67,7 +67,7 @@ class _TasksScreenState extends State<TasksScreen> {
               onTap: () {},
               child: const Icon(
                 Icons.star_outline,
-                size: 32,
+                size: 30,
               ),
             ),
           );
