@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do/screens/starred_tasks.dart';
+import 'package:to_do/screens/tasks_screen.dart';
 import 'package:to_do/utils/colors.dart';
 import 'package:to_do/widgets/app_bottom_sheet.dart';
 import 'package:to_do/widgets/app_tab_bar_indicator.dart';
@@ -113,9 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   physics: const AlwaysScrollableScrollPhysics(),
                   children: const [
                     StarredTasksScreen(),
-                    Center(
-                      child: Text("Tasks Tab"),
-                    ),
+                    TasksScreen(),
                   ],
                 ),
               ),
