@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do/models/task.dart';
 import 'package:to_do/providers/starred_provider.dart';
+import 'package:to_do/utils/colors.dart';
 import 'package:to_do/widgets/app_empty_view.dart';
 import 'package:to_do/widgets/task_tile.dart';
 
@@ -21,6 +22,32 @@ class StarredTasksScreen extends ConsumerWidget {
         : ListView.builder(
             itemCount: starredTasks.length,
             itemBuilder: (context, index) {
+              if (index == 0) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(
+                        top: 24,
+                        left: 16,
+                        right: 16,
+                      ),
+                      child: const Text(
+                        "Starred recently",
+                        style: TextStyle(
+                          color: kPrimaryTextColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    TaskTile(
+                      description: starredTasks[index].description,
+                      isStarred: starredTasks[index].isStarred,
+                    ),
+                  ],
+                );
+              }
               return TaskTile(
                 description: starredTasks[index].description,
                 isStarred: starredTasks[index].isStarred,
