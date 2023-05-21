@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/models/task.dart';
 import 'package:to_do/providers/tasks_provider.dart';
-import 'package:to_do/utils/colors.dart';
 import 'package:to_do/widgets/app_empty_view.dart';
-import 'package:to_do/widgets/touchable_opacity.dart';
+import 'package:to_do/widgets/task_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TasksScreen extends ConsumerWidget {
@@ -22,42 +21,9 @@ class TasksScreen extends ConsumerWidget {
         : ListView.builder(
             itemCount: tasksList.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 16,
-                ),
-                leading: TouchableOpacity(
-                  backgroundColor: Colors.transparent,
-                  width: 30,
-                  height: 30,
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.circle_outlined,
-                    size: 30,
-                  ),
-                ),
-                title: Text(
-                  tasksList[index].description,
-                  style: const TextStyle(
-                    color: kPrimaryTextColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    height: 1.4,
-                  ),
-                ),
-                trailing: TouchableOpacity(
-                  backgroundColor: Colors.transparent,
-                  width: 30,
-                  height: 30,
-                  onTap: () {},
-                  child: Icon(
-                    tasksList[index].isStarred
-                        ? Icons.star_outlined
-                        : Icons.star_outline,
-                    size: 30,
-                  ),
-                ),
+              return TaskTile(
+                description: tasksList[index].description,
+                isStarred: tasksList[index].isStarred,
               );
             },
           );

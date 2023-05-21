@@ -1,61 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/utils/colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:to_do/models/task.dart';
+import 'package:to_do/providers/starred_provider.dart';
+import 'package:to_do/widgets/app_empty_view.dart';
+import 'package:to_do/widgets/task_tile.dart';
 
-class StarredTasksScreen extends StatelessWidget {
+class StarredTasksScreen extends ConsumerWidget {
   const StarredTasksScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator.adaptive(
-      onRefresh: () {
-        return Future(() => {});
-      },
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                clipBehavior: Clip.none,
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.minHeight),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/images/star.png",
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: 250,
-                      ),
-                      const SizedBox(height: 30),
-                      Text(
-                        "No starred tasks",
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        "Mark important tasks with a star so that \n you can easily find them here",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: kSecondaryTextColor,
-                          height: 1.4,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<Task> starredTasks = ref.watch(starredProvider);
+
+    return starredTasks.isEmpty
+        ? const AppEmptyView(
+            imagePath: "assets/images/star.png",
+            title: "No starred tasks",
+            text:
+                "Mark important tasks with a star so that \n you can easily find them here")
+        : ListView.builder(
+            itemCount: starredTasks.length,
+            itemBuilder: (context, index) {
+              return TaskTile(
+                description: starredTasks[index].description,
+                isStarred: starredTasks[index].isStarred,
               );
             },
-          ),
-        ],
-      ),
-    );
+          );
   }
 }

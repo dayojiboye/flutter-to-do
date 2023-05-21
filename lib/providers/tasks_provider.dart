@@ -13,6 +13,16 @@ class TasksNotifier extends StateNotifier<List<Task>> {
   }
 
   // To:Do: Implement remove task
+
+  void toggleStarredTask(String taskId) {
+    state = state
+        .map((task) => task.id == taskId
+            ? task.copyWith(isStarred: !task.isStarred)
+            : task)
+        .toList();
+  }
+
+  // To:Do: Implement complete task toggle
 }
 
 final taskProvider = StateNotifierProvider<TasksNotifier, List<Task>>((ref) {
