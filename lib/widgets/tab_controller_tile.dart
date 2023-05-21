@@ -8,12 +8,14 @@ class TabControllerTile extends StatelessWidget {
     required this.title,
     required this.selected,
     required this.onTap,
+    required this.modalContext,
   });
 
   final Widget? leading;
   final String title;
   final bool selected;
   final void Function() onTap;
+  final BuildContext modalContext;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,10 @@ class TabControllerTile extends StatelessWidget {
           horizontal: 12,
           vertical: 2,
         ),
-        onTap: onTap,
+        onTap: () {
+          onTap();
+          Navigator.pop(modalContext);
+        },
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(50),

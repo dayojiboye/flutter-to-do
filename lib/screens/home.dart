@@ -147,21 +147,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               TabControllerTile(
                                 leading: const Icon(Icons.star, size: 25),
                                 title: "Starred",
+                                modalContext: context,
                                 selected: _selectedIndex == 0,
                                 onTap: () {
                                   if (_selectedIndex == 0) return;
                                   _controller.animateTo(_selectedIndex = 0);
-                                  Navigator.pop(context);
                                 },
                               ),
                               TabControllerTile(
                                 leading: const SizedBox(),
                                 title: "My Tasks",
+                                modalContext: context,
                                 selected: _selectedIndex == 1,
                                 onTap: () {
                                   if (_selectedIndex == 1) return;
                                   _controller.animateTo(_selectedIndex = 1);
-                                  Navigator.pop(context);
                                 },
                               )
                             ],

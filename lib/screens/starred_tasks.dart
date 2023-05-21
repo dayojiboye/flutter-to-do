@@ -25,7 +25,7 @@ class StarredTasksScreen extends StatelessWidget {
                     children: [
                       Image.asset(
                         "assets/images/star.png",
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery.of(context).size.width / 2,
                         height: 250,
                       ),
                       const SizedBox(height: 30),
