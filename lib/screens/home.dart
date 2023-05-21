@@ -165,7 +165,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             onTap: () => AppBottomSheet(
               context: context,
               showDragHandle: false,
-              child: const AddTask(),
+              child: AddTask(
+                onSuccess: () {
+                  _controller.animateTo(_selectedIndex = 1);
+                },
+              ),
             ).open(),
             width: 70,
             height: 70,
