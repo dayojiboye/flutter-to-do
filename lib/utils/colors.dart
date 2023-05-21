@@ -9,6 +9,7 @@ const kMuted = Color(0xFF80868b);
 const kBorder = Color(0xFFeeeeee);
 const kError = Colors.red;
 const kSuccess = Colors.green;
+const kLightBlue = Color.fromARGB(255, 211, 226, 248);
 
 // Dark Theme Colors
 // To-Do: Get appropriate colors for dark theme!

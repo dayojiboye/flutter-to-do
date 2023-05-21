@@ -1,41 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/utils/colors.dart';
 
-class CustomBottomsheet {
-  const CustomBottomsheet({
+class AppBottomSheet {
+  const AppBottomSheet({
     required this.context,
     required this.child,
+    this.height,
+    this.showDragHandle = true,
   });
 
   final BuildContext context;
   final Widget child;
+  final double? height;
+  final bool showDragHandle;
 
   void open() {
     showModalBottomSheet(
       context: context,
+      showDragHandle: showDragHandle,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(15.0),
+        ),
+      ),
       builder: (ctx) => SizedBox(
         width: double.infinity,
-        // height: SizeConfig.screenHeight, // testing
-        child: Padding(
-          // padding: const EdgeInsets.all(12),
-          padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-          child: Column(
-            children: [
-              // bottom sheet top handle
-              Container(
-                width: 40,
-                height: 5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: kMuted,
-                ),
-              ),
-              const SizedBox(height: 20),
-              // inner child widget
-              child
-            ],
-          ),
-        ),
+        height: height,
+        child: child,
       ),
     );
   }

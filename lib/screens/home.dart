@@ -2,11 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do/screens/starred_tasks.dart';
 import 'package:to_do/utils/colors.dart';
+import 'package:to_do/widgets/app_bottom_sheet.dart';
 import 'package:to_do/widgets/app_tab_bar_indicator.dart';
+import 'package:to_do/widgets/tab_controller_tile.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  late TabController _controller;
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TabController(length: 2, vsync: this);
+
+    _controller.addListener(() {
+      setState(() {
+        _selectedIndex = _controller.index;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +44,7 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text("Tasks"),
           bottom: TabBar(
+            controller: _controller,
             labelColor: kPrimaryColor,
             labelStyle: GoogleFonts.roboto(),
             unselectedLabelColor: kSecondaryTextColor,
@@ -43,7 +72,7 @@ class HomeScreen extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Container(
-          padding: const EdgeInsets.only(bottom: 32),
+          padding: const EdgeInsets.only(bottom: 20),
           child: const TouchableOpacity(
             width: 70,
             height: 70,
@@ -78,10 +107,11 @@ class HomeScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const Expanded(
+              Expanded(
                 child: TabBarView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  children: [
+                  controller: _controller,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: const [
                     StarredTasksScreen(),
                     Center(
                       child: Text("Tasks Tab"),
@@ -90,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 100,
+                height: 90,
                 padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
                 decoration: const BoxDecoration(
                   color: kBackGroundColor,
@@ -101,24 +131,80 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     TouchableOpacity(
+                      onTap: () => AppBottomSheet(
+                        context: context,
+                        showDragHandle: false,
+                        height: 200,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 12.0, right: 8.0),
+                          child: Column(
+                            children: [
+                              TabControllerTile(
+                                leading: const Icon(Icons.star, size: 25),
+                                title: "Starred",
+                                selected: _selectedIndex == 0,
+                                onTap: () {
+                                  if (_selectedIndex == 0) return;
+                                  _controller.animateTo(_selectedIndex = 0);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TabControllerTile(
+                                leading: const SizedBox(),
+                                title: "My Tasks",
+                                selected: _selectedIndex == 1,
+                                onTap: () {
+                                  if (_selectedIndex == 1) return;
+                                  _controller.animateTo(_selectedIndex = 1);
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ).open(),
                       backgroundColor: kBackGroundColor,
-                      child: Icon(
+                      child: const Icon(
                         Icons.menu_sharp,
                         color: kMuted,
-                        size: 32,
+                        size: 30,
                       ),
                     ),
                     TouchableOpacity(
+                      onTap: () => AppBottomSheet(
+                        context: context,
+                        showDragHandle: false,
+                        height: 200,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 12.0, right: 8.0),
+                          child: Column(
+                            children: [
+                              SwitchListTile.adaptive(
+                                value: false,
+                                title: const Text(
+                                  "Switch to dark mode",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    color: kPrimaryTextColor,
+                                  ),
+                                ),
+                                onChanged: (value) {},
+                              )
+                            ],
+                          ),
+                        ),
+                      ).open(),
                       backgroundColor: kBackGroundColor,
-                      child: Icon(
+                      child: const Icon(
                         Icons.more_horiz_sharp,
                         color: kMuted,
-                        size: 32,
+                        size: 30,
                       ),
                     ),
                   ],
