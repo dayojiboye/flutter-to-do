@@ -21,7 +21,7 @@ class _TasksScreenState extends State<TasksScreen> {
     ),
     Task(
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      isStarred: false,
+      isStarred: true,
       isCompleted: false,
       date: DateTime.now(),
     ),
@@ -65,8 +65,10 @@ class _TasksScreenState extends State<TasksScreen> {
               width: 30,
               height: 30,
               onTap: () {},
-              child: const Icon(
-                Icons.star_outline,
+              child: Icon(
+                TasksList[index].isStarred
+                    ? Icons.star_outlined
+                    : Icons.star_outline,
                 size: 30,
               ),
             ),
