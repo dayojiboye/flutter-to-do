@@ -3,8 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do/screens/starred_tasks.dart';
 import 'package:to_do/screens/tasks_screen.dart';
 import 'package:to_do/utils/colors.dart';
+import 'package:to_do/widgets/add_task_bottom_sheet.dart';
 import 'package:to_do/widgets/app_bottom_sheet.dart';
 import 'package:to_do/widgets/app_tab_bar_indicator.dart';
+import 'package:to_do/widgets/settings_bottom_sheet.dart';
 import 'package:to_do/widgets/tab_controller_tile.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
 
@@ -42,6 +44,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        // extendBody: true,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Tasks"),
           bottom: TabBar(
@@ -53,7 +57,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             indicatorPadding: const EdgeInsets.only(bottom: -12),
             tabs: const [
               Tab(
-                icon: Icon(Icons.star, size: 30),
+                icon: Icon(
+                  Icons.star,
+                  size: 30,
+                ),
               ),
               Tab(
                 child: Text(
@@ -71,14 +78,99 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
         ),
+        bottomNavigationBar: Container(
+          height: 100,
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 213, 212, 212),
+                blurRadius: 7,
+              ),
+            ],
+          ),
+          child: BottomAppBar(
+            height: double.infinity,
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+            elevation: 0,
+            shape: const CircularNotchedRectangle(),
+            notchMargin: 0,
+            color: kBackGroundColor,
+            clipBehavior: Clip.hardEdge,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TouchableOpacity(
+                  onTap: () => AppBottomSheet(
+                    context: context,
+                    showDragHandle: false,
+                    height: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12.0, right: 8.0),
+                      child: Column(
+                        children: [
+                          TabControllerTile(
+                            leading: const Icon(Icons.star, size: 25),
+                            title: "Starred",
+                            modalContext: context,
+                            selected: _selectedIndex == 0,
+                            onTap: () {
+                              if (_selectedIndex == 0) return;
+                              _controller.animateTo(_selectedIndex = 0);
+                            },
+                          ),
+                          TabControllerTile(
+                            leading: const SizedBox(),
+                            title: "My Tasks",
+                            modalContext: context,
+                            selected: _selectedIndex == 1,
+                            onTap: () {
+                              if (_selectedIndex == 1) return;
+                              _controller.animateTo(_selectedIndex = 1);
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ).open(),
+                  backgroundColor: kBackGroundColor,
+                  child: const Icon(
+                    Icons.menu_sharp,
+                    color: kMuted,
+                    size: 30,
+                  ),
+                ),
+                TouchableOpacity(
+                  onTap: () => AppBottomSheet(
+                    context: context,
+                    showDragHandle: false,
+                    height: 200,
+                    child: const SettingsBottomSheet(),
+                  ).open(),
+                  backgroundColor: kBackGroundColor,
+                  child: const Icon(
+                    Icons.more_horiz_sharp,
+                    color: kMuted,
+                    size: 30,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Container(
           padding: const EdgeInsets.only(bottom: 20),
-          child: const TouchableOpacity(
+          child: TouchableOpacity(
+            onTap: () => AppBottomSheet(
+              context: context,
+              showDragHandle: false,
+              child: const AddTask(),
+            ).open(),
             width: 70,
             height: 70,
             opacity: 1.0,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: kBackGroundColor,
               shape: BoxShape.circle,
               boxShadow: [
@@ -88,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            child: Icon(
+            child: const Icon(
               Icons.add,
               size: 45,
               color: kPrimaryColor,
@@ -96,7 +188,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
         ),
         body: Container(
-          // height: double.infinity,
           margin: const EdgeInsets.only(top: 4),
           decoration: const BoxDecoration(
             border: Border(
@@ -118,97 +209,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              Container(
-                height: 90,
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-                decoration: const BoxDecoration(
-                  color: kBackGroundColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 213, 212, 212),
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    TouchableOpacity(
-                      onTap: () => AppBottomSheet(
-                        context: context,
-                        showDragHandle: false,
-                        height: 200,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 12.0, right: 8.0),
-                          child: Column(
-                            children: [
-                              TabControllerTile(
-                                leading: const Icon(Icons.star, size: 25),
-                                title: "Starred",
-                                modalContext: context,
-                                selected: _selectedIndex == 0,
-                                onTap: () {
-                                  if (_selectedIndex == 0) return;
-                                  _controller.animateTo(_selectedIndex = 0);
-                                },
-                              ),
-                              TabControllerTile(
-                                leading: const SizedBox(),
-                                title: "My Tasks",
-                                modalContext: context,
-                                selected: _selectedIndex == 1,
-                                onTap: () {
-                                  if (_selectedIndex == 1) return;
-                                  _controller.animateTo(_selectedIndex = 1);
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                      ).open(),
-                      backgroundColor: kBackGroundColor,
-                      child: const Icon(
-                        Icons.menu_sharp,
-                        color: kMuted,
-                        size: 30,
-                      ),
-                    ),
-                    TouchableOpacity(
-                      onTap: () => AppBottomSheet(
-                        context: context,
-                        showDragHandle: false,
-                        height: 200,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 12.0, right: 8.0),
-                          child: Column(
-                            children: [
-                              SwitchListTile.adaptive(
-                                value: false,
-                                title: const Text(
-                                  "Switch to dark mode",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18,
-                                    color: kPrimaryTextColor,
-                                  ),
-                                ),
-                                onChanged: (value) {},
-                              )
-                            ],
-                          ),
-                        ),
-                      ).open(),
-                      backgroundColor: kBackGroundColor,
-                      child: const Icon(
-                        Icons.more_horiz_sharp,
-                        color: kMuted,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         ),

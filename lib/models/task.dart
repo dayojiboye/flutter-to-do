@@ -22,4 +22,17 @@ class Task {
   String get formattedDate {
     return formatter.format(date);
   }
+
+  Task copyWith(
+      {String? description,
+      bool? isStarred,
+      DateTime? date,
+      bool? isCompleted}) {
+    return Task(
+      description: description ?? this.description,
+      isStarred: isStarred ?? this.isStarred,
+      date: date ?? this.date,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
 }
