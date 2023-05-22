@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:to_do/enums/enums.dart';
+import 'package:to_do/providers/tasks_provider.dart';
 import 'package:to_do/utils/colors.dart';
+import 'package:to_do/widgets/app_snackbar.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
 
-class TaskTile extends StatelessWidget {
+class TaskTile extends ConsumerWidget {
   const TaskTile({
     super.key,
     required this.description,
     required this.isStarred,
+    required this.taskId,
   });
 
   final String description;
   final bool isStarred;
+  final String taskId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(
         vertical: 10,
@@ -43,7 +50,18 @@ class TaskTile extends StatelessWidget {
         backgroundColor: Colors.transparent,
         width: 30,
         height: 30,
-        onTap: () {},
+        onTap: () {
+          HapticFeedback.mediumImpact();
+          ref.read(taskProvider.notifier).toggleStarredTask(taskId);
+          ScaffoldMessenger.of(context).clearSnackBars();
+          AppSnackbar(
+            context: context,
+            variant: SnackbarVariant.SUCCESS,
+            text: isStarred
+                ? "Task has been unmarked as important"
+                : "Task has been marked as important",
+          ).showFeedback();
+        },
         child: Icon(
           isStarred ? Icons.star_outlined : Icons.star_outline,
           size: 30,

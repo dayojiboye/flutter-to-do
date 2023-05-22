@@ -44,6 +44,7 @@ class StarredTasksScreen extends ConsumerWidget {
                     TaskTile(
                       description: starredTasks[index].description,
                       isStarred: starredTasks[index].isStarred,
+                      taskId: starredTasks[index].id,
                     ),
                   ],
                 );
@@ -51,6 +52,7 @@ class StarredTasksScreen extends ConsumerWidget {
               return TaskTile(
                 description: starredTasks[index].description,
                 isStarred: starredTasks[index].isStarred,
+                taskId: starredTasks[index].id,
               );
             },
           );

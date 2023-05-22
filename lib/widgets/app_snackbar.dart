@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/constants/enums.dart';
+import 'package:to_do/enums/enums.dart';
 import 'package:to_do/utils/colors.dart';
 
-class CustomSnackbar {
-  const CustomSnackbar(
-      {required this.context, required this.variant, required this.text});
+class AppSnackbar {
+  const AppSnackbar({
+    required this.context,
+    required this.variant,
+    required this.text,
+  });
 
   final BuildContext context;
   final SnackbarVariant variant;
@@ -27,10 +30,12 @@ class CustomSnackbar {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: _getVariant,
+        behavior: SnackBarBehavior.floating,
+        elevation: 0,
         content: Text(
           text,
           style: const TextStyle(
-            color: kSecondaryTextColor,
+            color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
