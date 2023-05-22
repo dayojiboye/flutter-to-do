@@ -7,19 +7,18 @@ class AppSnackbar {
     required this.context,
     required this.variant,
     required this.text,
+    this.action,
   });
 
   final BuildContext context;
   final SnackbarVariant variant;
   final String text;
+  final SnackBarAction? action;
 
   Color? get _getVariant {
     switch (variant) {
       case SnackbarVariant.ERROR:
         return kError;
-
-      case SnackbarVariant.SUCCESS:
-        return kSuccess;
 
       default:
         return null;
@@ -31,6 +30,7 @@ class AppSnackbar {
       SnackBar(
         backgroundColor: _getVariant,
         behavior: SnackBarBehavior.floating,
+        action: action,
         elevation: 0,
         content: Text(
           text,

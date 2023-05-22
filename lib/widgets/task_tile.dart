@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:to_do/enums/enums.dart';
+import 'package:to_do/models/task.dart';
+// import 'package:to_do/providers/starred_provider.dart';
 import 'package:to_do/providers/tasks_provider.dart';
 import 'package:to_do/utils/colors.dart';
 import 'package:to_do/widgets/app_snackbar.dart';
@@ -10,17 +12,39 @@ import 'package:to_do/widgets/touchable_opacity.dart';
 class TaskTile extends ConsumerWidget {
   const TaskTile({
     super.key,
-    required this.description,
-    required this.isStarred,
-    required this.taskId,
+    this.isStarredScreen = false,
+    required this.task,
   });
 
-  final String description;
-  final bool isStarred;
-  final String taskId;
+  final bool isStarredScreen;
+  final Task task;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final List<Task> starredTasksList = ref.watch(starredProvider);
+
+    void showSnackbar() {
+      if (isStarredScreen && task.isStarred) {
+        AppSnackbar(
+          context: context,
+          variant: SnackbarVariant.SUCCESS,
+          text: "Task removed from Starred",
+          // action: SnackBarAction(
+          //   label: "Undo",
+          //   onPressed: () {
+          //     int taskIndex =
+          //         starredTasksList.indexWhere((t) => t.id == task.id);
+          //     starredTasksList.insert(
+          //       taskIndex,
+          //       task.copyWith(isStarred: true),
+          //     );
+          //   },
+          //   textColor: kPrimaryColor,
+          // ),
+        ).showFeedback();
+      }
+    }
+
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(
         vertical: 10,
@@ -38,7 +62,7 @@ class TaskTile extends ConsumerWidget {
         ),
       ),
       title: Text(
-        description,
+        task.description,
         style: const TextStyle(
           color: kPrimaryTextColor,
           fontSize: 18,
@@ -52,20 +76,14 @@ class TaskTile extends ConsumerWidget {
         height: 30,
         onTap: () {
           HapticFeedback.mediumImpact();
-          ref.read(taskProvider.notifier).toggleStarredTask(taskId);
+          ref.read(taskProvider.notifier).toggleStarredTask(task.id);
           ScaffoldMessenger.of(context).clearSnackBars();
-          AppSnackbar(
-            context: context,
-            variant: SnackbarVariant.SUCCESS,
-            text: isStarred
-                ? "Task has been unmarked as important"
-                : "Task has been marked as important",
-          ).showFeedback();
+          showSnackbar();
         },
         child: Icon(
-          isStarred ? Icons.star_outlined : Icons.star_outline,
+          task.isStarred ? Icons.star_outlined : Icons.star_outline,
           size: 30,
-          color: isStarred ? kPrimaryColor : kMuted,
+          color: task.isStarred ? kPrimaryColor : kMuted,
         ),
       ),
     );

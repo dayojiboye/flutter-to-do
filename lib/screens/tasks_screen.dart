@@ -22,9 +22,7 @@ class TasksScreen extends ConsumerWidget {
             itemCount: tasksList.length,
             itemBuilder: (context, index) {
               return TaskTile(
-                description: tasksList[index].description,
-                isStarred: tasksList[index].isStarred,
-                taskId: tasksList[index].id,
+                task: tasksList[index],
               );
             },
           );

@@ -42,17 +42,15 @@ class StarredTasksScreen extends ConsumerWidget {
                       ),
                     ),
                     TaskTile(
-                      description: starredTasks[index].description,
-                      isStarred: starredTasks[index].isStarred,
-                      taskId: starredTasks[index].id,
+                      task: starredTasks[index],
+                      isStarredScreen: true,
                     ),
                   ],
                 );
               }
               return TaskTile(
-                description: starredTasks[index].description,
-                isStarred: starredTasks[index].isStarred,
-                taskId: starredTasks[index].id,
+                task: starredTasks[index],
+                isStarredScreen: true,
               );
             },
           );
