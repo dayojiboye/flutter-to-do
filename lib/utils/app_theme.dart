@@ -15,7 +15,7 @@ class AppThemeData {
     primaryColor: kPrimaryColor,
     primaryColorDark: kPrimaryTextColor,
     dividerColor: kBorder,
-    fontFamily: GoogleFonts.roboto().fontFamily,
+    fontFamily: GoogleFonts.interTight().fontFamily,
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
@@ -24,7 +24,7 @@ class AppThemeData {
         fontSize: 24,
         color: kPrimaryTextColor,
         fontWeight: FontWeight.w500,
-        fontFamily: GoogleFonts.roboto().fontFamily,
+        fontFamily: GoogleFonts.interTight().fontFamily,
       ),
       iconTheme: const IconThemeData(color: kSecondaryTextColor),
       systemOverlayStyle: const SystemUiOverlayStyle(
@@ -39,7 +39,7 @@ class AppThemeData {
     iconTheme: const IconThemeData(color: kPrimaryTextColor),
     bottomSheetTheme:
         const BottomSheetThemeData(backgroundColor: kBackGroundColor),
-    textTheme: GoogleFonts.robotoTextTheme().copyWith(
+    textTheme: GoogleFonts.interTightTextTheme().copyWith(
       labelLarge: const TextStyle(color: kPrimaryTextColor),
       titleLarge: const TextStyle(color: kPrimaryTextColor),
       titleSmall: const TextStyle(color: kPrimaryTextColor),

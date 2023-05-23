@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
             elevation: 0,
             shape: const CircularNotchedRectangle(),
-            notchMargin: 0,
+            notchMargin: 2,
             color: kBackGroundColor,
             clipBehavior: Clip.hardEdge,
             child: Row(
@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Container(
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.only(bottom: 7),
           child: TouchableOpacity(
             onTap: () => AppBottomSheet(
               context: context,

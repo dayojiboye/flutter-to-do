@@ -4,6 +4,7 @@ import 'package:to_do/models/task.dart';
 import 'package:to_do/providers/tasks_provider.dart';
 import 'package:to_do/utils/colors.dart';
 import 'package:to_do/widgets/app_text_button.dart';
+import 'package:to_do/widgets/app_text_field.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
 
 class AddTask extends ConsumerStatefulWidget {
@@ -24,7 +25,7 @@ class AddTaskState extends ConsumerState<AddTask> {
   bool _isStarred = false;
 
   void _onSaveTask() {
-    if (_newTaskController.text.isEmpty) return;
+    if (_newTaskController.text.trim().isEmpty) return;
 
     ref.read(taskProvider.notifier).addTask(
           Task(
@@ -61,27 +62,20 @@ class AddTaskState extends ConsumerState<AddTask> {
           ),
           child: Column(
             children: [
-              TextField(
-                autofocus: true,
-                autocorrect: true,
-                cursorColor: kMuted,
-                textCapitalization: TextCapitalization.sentences,
+              AppTextField(
+                controller: _newTaskController,
                 style: const TextStyle(
                   fontSize: 18,
                 ),
-                decoration: const InputDecoration(
-                  hintText: "New task",
-                  hintStyle: TextStyle(
-                    color: kMuted,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
-                  border: InputBorder.none,
+                hintText: "New task",
+                hintStyle: const TextStyle(
+                  color: kMuted,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
                 ),
-                controller: _newTaskController,
                 onChanged: (value) {
                   setState(() {
-                    _isButtonDisabled = value.isEmpty;
+                    _isButtonDisabled = value!.trim().isEmpty;
                   });
                 },
               ),

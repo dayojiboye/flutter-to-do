@@ -54,7 +54,9 @@ class TaskTile extends ConsumerWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => const EditTaskScreen(),
+            builder: (context) => EditTaskScreen(
+              task: task,
+            ),
           ),
         );
       },
