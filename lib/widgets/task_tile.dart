@@ -5,6 +5,7 @@ import 'package:to_do/enums/enums.dart';
 import 'package:to_do/models/task.dart';
 // import 'package:to_do/providers/starred_provider.dart';
 import 'package:to_do/providers/tasks_provider.dart';
+import 'package:to_do/screens/edit_task_screen.dart';
 import 'package:to_do/utils/colors.dart';
 import 'package:to_do/widgets/app_snackbar.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
@@ -50,6 +51,13 @@ class TaskTile extends ConsumerWidget {
         vertical: 10,
         horizontal: 16,
       ),
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const EditTaskScreen(),
+          ),
+        );
+      },
       leading: TouchableOpacity(
         backgroundColor: Colors.transparent,
         width: 30,

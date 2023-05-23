@@ -35,7 +35,7 @@ class AddTaskState extends ConsumerState<AddTask> {
           ),
         );
 
-    Navigator.pop(context);
+    Navigator.of(context).pop();
     widget.onSuccess();
   }
 

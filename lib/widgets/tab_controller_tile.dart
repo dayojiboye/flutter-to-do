@@ -33,7 +33,7 @@ class TabControllerTile extends StatelessWidget {
         ),
         onTap: () {
           onTap();
-          Navigator.pop(modalContext);
+          Navigator.of(modalContext).pop();
         },
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
