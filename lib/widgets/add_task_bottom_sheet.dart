@@ -6,6 +6,9 @@ import 'package:to_do/utils/colors.dart';
 import 'package:to_do/widgets/app_text_button.dart';
 import 'package:to_do/widgets/app_text_field.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
+import 'package:uuid/uuid.dart';
+
+const uuid = Uuid();
 
 class AddTask extends ConsumerStatefulWidget {
   const AddTask({
@@ -27,12 +30,21 @@ class AddTaskState extends ConsumerState<AddTask> {
   void _onSaveTask() {
     if (_newTaskController.text.trim().isEmpty) return;
 
+    // check if ID exists already
+    final uniqueId = uuid.v4();
+    final bool idExists = ref.watch(taskProvider).any(
+          (task) => task.id == uniqueId,
+        );
+
     ref.read(taskProvider.notifier).addTask(
           Task(
             description: _newTaskController.text.trim(),
             isStarred: _isStarred,
             date: DateTime.now(),
             isCompleted: false,
+            id: idExists
+                ? "$uniqueId-${_newTaskController.text.trim()}"
+                : uniqueId,
           ),
         );
 

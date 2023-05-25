@@ -1,7 +1,4 @@
-import 'package:uuid/uuid.dart';
 import "package:intl/intl.dart";
-
-const uuid = Uuid();
 
 final formatter = DateFormat.yMd();
 
@@ -11,7 +8,8 @@ class Task {
     required this.isStarred,
     required this.date,
     required this.isCompleted,
-  }) : id = uuid.v4();
+    required this.id,
+  });
 
   final String description;
   final bool isStarred;
@@ -23,16 +21,19 @@ class Task {
     return formatter.format(date);
   }
 
-  Task copyWith(
-      {String? description,
-      bool? isStarred,
-      DateTime? date,
-      bool? isCompleted}) {
+  Task copyWith({
+    String? description,
+    bool? isStarred,
+    DateTime? date,
+    bool? isCompleted,
+    String? id,
+  }) {
     return Task(
       description: description ?? this.description,
       isStarred: isStarred ?? this.isStarred,
       date: date ?? this.date,
       isCompleted: isCompleted ?? this.isCompleted,
+      id: id ?? this.id,
     );
   }
 }

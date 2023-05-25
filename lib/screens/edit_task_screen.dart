@@ -4,6 +4,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import 'package:to_do/models/task.dart';
 import 'package:to_do/providers/tasks_provider.dart';
 import 'package:to_do/utils/colors.dart';
+import 'package:to_do/widgets/app_text_button.dart';
 import 'package:to_do/widgets/app_text_field.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
 import "package:flutter_svg/flutter_svg.dart";
@@ -31,17 +32,17 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _editTaskController.text = widget.task.description;
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Task> taskList = ref.watch(taskProvider);
+    final List<Task> tasksList = ref.watch(taskProvider);
 
-    // final Task exactTask =
-    //     taskList.where((task) => task.id == widget.task.id).toList()[0];
+    final Task editedTask = tasksList.firstWhere(
+      (task) => task.id == widget.task.id,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +50,13 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
         leading: TouchableOpacity(
           backgroundColor: Colors.transparent,
           width: 56.0,
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () {
+            ref.read(taskProvider.notifier).editTask(
+                  widget.task.id,
+                  _editTaskController.text.trim(),
+                );
+            Navigator.of(context).pop();
+          },
           child: const Icon(
             Icons.chevron_left_sharp,
             size: 50,
@@ -63,10 +70,9 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
             backgroundColor: Colors.transparent,
             width: 30,
             child: Icon(
-              widget.task.isStarred ? Icons.star_outlined : Icons.star_outline,
+              editedTask.isStarred ? Icons.star_outlined : Icons.star_outline,
               size: 30,
-              color:
-                  widget.task.isStarred ? kPrimaryColor : kSecondaryTextColor,
+              color: editedTask.isStarred ? kPrimaryColor : kSecondaryTextColor,
             ),
           ),
           const SizedBox(width: 38),
@@ -120,6 +126,13 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
                 ),
               );
             },
+          ),
+          const Positioned(
+            bottom: 24.0,
+            right: 20.0,
+            child: SafeArea(
+              child: AppTextButton(text: "Mark completed"),
+            ),
           ),
         ],
       ),

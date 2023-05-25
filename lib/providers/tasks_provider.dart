@@ -22,6 +22,13 @@ class TasksNotifier extends StateNotifier<List<Task>> {
         .toList();
   }
 
+  void editTask(String taskId, String desc) {
+    state = state
+        .map((task) =>
+            task.id == taskId ? task.copyWith(description: desc) : task)
+        .toList();
+  }
+
   // To:Do: Implement complete task toggle
 }
 
