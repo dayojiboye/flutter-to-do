@@ -68,7 +68,12 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
         actions: [
           TouchableOpacity(
             onTap: () {
-              ref.read(taskProvider.notifier).toggleStarredTask(widget.task.id);
+              ref.read(taskProvider.notifier).toggleStarredTask(
+                    widget.task.id,
+                    widget.taskIndex,
+                    editedTask.isStarred,
+                    widget.task,
+                  );
             },
             backgroundColor: Colors.transparent,
             width: 30,
@@ -87,7 +92,7 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
                     widget.task,
                     widget.taskIndex,
                   );
-              Navigator.of(context).pop(widget.taskIndex);
+              Navigator.of(context).pop();
             },
             backgroundColor: Colors.transparent,
             width: 30,

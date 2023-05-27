@@ -17,43 +17,52 @@ class StarredTasksScreen extends ConsumerWidget {
     final GlobalKey<AnimatedListState> listKey =
         ref.watch(taskProvider.notifier).getStarredListKey;
 
+    // print(starredTasks.length);
+
     return starredTasks.isEmpty
         ? const AppEmptyView(
             imagePath: "assets/images/star.png",
             title: "No starred tasks",
             text:
                 "Mark important tasks with a star so that \n you can easily find them here")
-        : AnimatedList(
-            key: listKey,
-            initialItemCount: starredTasks.length,
-            itemBuilder: (context, index, animation) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (index == 0)
-                    Container(
-                      padding: const EdgeInsets.only(
-                        top: 24,
-                        left: 16,
-                        right: 16,
-                      ),
-                      child: const Text(
-                        "Starred recently",
-                        style: TextStyle(
-                          color: kPrimaryTextColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  TaskTile(
-                    animation: animation,
-                    task: starredTasks[index],
-                    isStarredScreen: true,
-                    taskIndex: index,
+        : SingleChildScrollView(
+            key: ValueKey(starredTasks.length),
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(
+                    top: 24,
+                    left: 16,
+                    right: 16,
                   ),
-                ],
-              );
-            });
+                  child: const Text(
+                    "Starred recently",
+                    style: TextStyle(
+                      color: kPrimaryTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                AnimatedList(
+                  key: listKey,
+                  primary: false,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  initialItemCount: starredTasks.length,
+                  itemBuilder: (context, index, animation) {
+                    return TaskTile(
+                      animation: animation,
+                      task: starredTasks[index],
+                      isStarredScreen: true,
+                      taskIndex: index,
+                    );
+                  },
+                )
+              ],
+            ),
+          );
   }
 }
