@@ -12,17 +12,23 @@ class TasksScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final List<Task> tasksList = ref.watch(taskProvider);
 
+    final GlobalKey<AnimatedListState> listKey =
+        ref.watch(taskProvider.notifier).getTaskListKey;
+
     return tasksList.isEmpty
         ? const AppEmptyView(
             imagePath: "assets/images/task.png",
             title: "No task added",
             text: "Add a task to get reminded",
           )
-        : ListView.builder(
-            itemCount: tasksList.length,
-            itemBuilder: (context, index) {
+        : AnimatedList(
+            key: listKey,
+            initialItemCount: tasksList.length,
+            itemBuilder: (context, index, animation) {
               return TaskTile(
+                animation: animation,
                 task: tasksList[index],
+                taskIndex: index,
               );
             },
           );

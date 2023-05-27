@@ -13,9 +13,11 @@ class EditTaskScreen extends ConsumerStatefulWidget {
   const EditTaskScreen({
     super.key,
     required this.task,
+    required this.taskIndex,
   });
 
   final Task task;
+  final int taskIndex;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => EditTaskScreenState();
@@ -42,6 +44,7 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
 
     final Task editedTask = tasksList.firstWhere(
       (task) => task.id == widget.task.id,
+      orElse: () => widget.task,
     );
 
     return Scaffold(
@@ -77,11 +80,20 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
           ),
           const SizedBox(width: 38),
           TouchableOpacity(
+            onTap: () {
+              ref.read(taskProvider.notifier).deleteTask(
+                    widget.task.id,
+                    context,
+                    widget.task,
+                    widget.taskIndex,
+                  );
+              Navigator.of(context).pop(widget.taskIndex);
+            },
             backgroundColor: Colors.transparent,
             width: 30,
             child: SvgPicture.asset(
               "assets/icons/trash.svg",
-              semanticsLabel: 'Acme Logo',
+              semanticsLabel: 'Delete Task',
               width: 25,
               colorFilter: const ColorFilter.mode(
                 kSecondaryTextColor,
