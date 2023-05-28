@@ -87,7 +87,7 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
           TouchableOpacity(
             onTap: () {
               ref.read(taskProvider.notifier).deleteTask(
-                    editedTask.id,
+                    widget.task.id,
                     context,
                     editedTask,
                     widget.taskIndex,

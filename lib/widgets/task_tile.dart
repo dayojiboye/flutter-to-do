@@ -65,7 +65,7 @@ class TaskTile extends ConsumerWidget {
           width: 30,
           height: 30,
           onTap: () {
-            HapticFeedback.mediumImpact();
+            HapticFeedback.lightImpact();
             ref.read(taskProvider.notifier).toggleStarredTask(
                   task.id,
                   taskIndex,

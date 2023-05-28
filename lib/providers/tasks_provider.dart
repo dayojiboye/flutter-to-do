@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:to_do/enums/enums.dart';
 import 'package:to_do/models/task.dart';
 
@@ -27,7 +28,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     );
   }
 
-  void _insertStarredItem(int taskIndex) {
+  void _insertStarredTask(int taskIndex) {
     starredListKey.currentState?.insertItem(
       taskIndex,
       duration: const Duration(milliseconds: 100),
@@ -45,7 +46,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     );
   }
 
-  void _removeStarredItem(
+  void _removeStarredTask(
     int taskIndex,
     TaskTile Function(dynamic context, dynamic animation) builder,
   ) {
@@ -99,6 +100,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
         label: "Undo",
         textColor: const Color(0xff6ba5ed),
         onPressed: () {
+          HapticFeedback.lightImpact();
           addTask(
             task,
             taskIndex,
@@ -107,14 +109,14 @@ class TasksNotifier extends StateNotifier<List<Task>> {
           if (isStarred == null) return;
 
           if (isStarred) {
-            _insertStarredItem(taskIndex);
+            _insertStarredTask(taskIndex);
           }
         },
       ),
     ).showFeedback();
 
     if (isStarred != null && isStarred) {
-      _removeStarredItem(taskIndex, builder);
+      _removeStarredTask(taskIndex, builder);
     }
 
     _removeTask(taskIndex, builder);
@@ -137,7 +139,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     if (isTaskStarred == null) return;
 
     if (!isTaskStarred) {
-      _insertStarredItem(taskIndex!);
+      _insertStarredTask(taskIndex!);
     } else if (isTaskStarred) {
       if (ctx != null && isStarredScreen) {
         ScaffoldMessenger.of(ctx).clearSnackBars();
@@ -149,13 +151,14 @@ class TasksNotifier extends StateNotifier<List<Task>> {
             label: "Undo",
             textColor: const Color(0xff6ba5ed),
             onPressed: () {
+              HapticFeedback.lightImpact();
               state = state.map((task) {
                 return task.id == taskId
                     ? task.copyWith(isStarred: true)
                     : task;
               }).toList();
 
-              _insertStarredItem(taskIndex!);
+              _insertStarredTask(taskIndex!);
             },
           ),
         ).showFeedback();
@@ -169,7 +172,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
         );
       }
 
-      _removeStarredItem(taskIndex!, builder);
+      _removeStarredTask(taskIndex!, builder);
     }
   }
 
