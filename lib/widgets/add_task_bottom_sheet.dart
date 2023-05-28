@@ -70,7 +70,7 @@ class AddTaskState extends ConsumerState<AddTask> {
             top: 10,
             left: 25,
             right: 25,
-            bottom: 30,
+            bottom: 15,
           ),
           child: Column(
             children: [

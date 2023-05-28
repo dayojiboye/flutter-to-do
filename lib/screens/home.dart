@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
         ),
         bottomNavigationBar: Container(
-          height: 100,
+          height: 85.0,
           decoration: const BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -90,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ],
           ),
           child: BottomAppBar(
-            height: double.infinity,
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
             elevation: 0,
             shape: const CircularNotchedRectangle(),
@@ -105,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   onTap: () => AppBottomSheet(
                     context: context,
                     showDragHandle: false,
-                    height: 200,
+                    height: 160.0,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 12.0, right: 8.0),
                       child: Column(
@@ -145,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   onTap: () => AppBottomSheet(
                     context: context,
                     showDragHandle: false,
-                    height: 200,
+                    height: 100.0,
                     child: const SettingsBottomSheet(),
                   ).open(),
                   backgroundColor: kBackGroundColor,
