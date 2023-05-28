@@ -107,7 +107,6 @@ class TasksNotifier extends StateNotifier<List<Task>> {
           if (isStarred == null) return;
 
           if (isStarred) {
-            print("From Undo Delete");
             _insertStarredItem(taskIndex);
           }
         },
