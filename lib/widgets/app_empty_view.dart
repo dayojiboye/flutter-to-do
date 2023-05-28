@@ -6,12 +6,12 @@ class AppEmptyView extends StatelessWidget {
     super.key,
     required this.imagePath,
     required this.title,
-    required this.text,
+    this.text,
   });
 
   final String imagePath;
   final String title;
-  final String text;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +36,17 @@ class AppEmptyView extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          Text(
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 15,
-              color: kSecondaryTextColor,
-              height: 1.4,
-              fontWeight: FontWeight.w500,
+          if (text != null)
+            Text(
+              (text!),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 15,
+                color: kSecondaryTextColor,
+                height: 1.4,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
         ],
       ),
     );

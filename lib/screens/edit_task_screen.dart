@@ -91,6 +91,7 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
                     context,
                     widget.task,
                     widget.taskIndex,
+                    editedTask.isStarred,
                   );
               Navigator.of(context).pop();
             },

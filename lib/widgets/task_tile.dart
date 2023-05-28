@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:to_do/enums/enums.dart';
 import 'package:to_do/models/task.dart';
 import 'package:to_do/providers/tasks_provider.dart';
 import 'package:to_do/screens/edit_task_screen.dart';
 import 'package:to_do/utils/colors.dart';
-import 'package:to_do/widgets/app_snackbar.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
 
 class TaskTile extends ConsumerWidget {
@@ -25,17 +23,6 @@ class TaskTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void showSnackbar() {
-      if (isStarredScreen && task.isStarred) {
-        AppSnackbar(
-          context: context,
-          variant: SnackbarVariant.SUCCESS,
-          text: "Task removed from Starred",
-          // To-Do: implement UNDO action
-        ).showFeedback();
-      }
-    }
-
     return SizeTransition(
       sizeFactor: animation,
       child: ListTile(
@@ -84,9 +71,9 @@ class TaskTile extends ConsumerWidget {
                   taskIndex,
                   task.isStarred,
                   task,
+                  context,
+                  isStarredScreen,
                 );
-            ScaffoldMessenger.of(context).clearSnackBars();
-            showSnackbar();
           },
           child: Icon(
             task.isStarred ? Icons.star_outlined : Icons.star_outline,

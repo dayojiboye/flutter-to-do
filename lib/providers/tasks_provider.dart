@@ -20,15 +20,48 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     return starredListKey;
   }
 
+  void _insertTask(int taskIndex) {
+    taskListKey.currentState?.insertItem(
+      taskIndex,
+      duration: const Duration(milliseconds: 100),
+    );
+  }
+
+  void _insertStarredItem(int taskIndex) {
+    starredListKey.currentState?.insertItem(
+      taskIndex,
+      duration: const Duration(milliseconds: 100),
+    );
+  }
+
+  void _removeTask(
+    int taskIndex,
+    TaskTile Function(dynamic context, dynamic animation) builder,
+  ) {
+    taskListKey.currentState?.removeItem(
+      taskIndex,
+      builder,
+      duration: const Duration(milliseconds: 200),
+    );
+  }
+
+  void _removeStarredItem(
+    int taskIndex,
+    TaskTile Function(dynamic context, dynamic animation) builder,
+  ) {
+    starredListKey.currentState?.removeItem(
+      taskIndex,
+      builder,
+      duration: const Duration(milliseconds: 200),
+    );
+  }
+
   void addTask(Task task, [int? taskIndex]) {
     if (taskIndex != null) {
       final tempState = state.toList();
       tempState.insert(taskIndex, task);
       state = tempState;
-      taskListKey.currentState?.insertItem(
-        taskIndex,
-        duration: const Duration(milliseconds: 100),
-      );
+      _insertTask(taskIndex);
       return;
     }
 
@@ -37,19 +70,26 @@ class TasksNotifier extends StateNotifier<List<Task>> {
       ...state,
     ];
 
-    taskListKey.currentState?.insertItem(
-      0,
-      duration: const Duration(milliseconds: 100),
-    );
+    _insertTask(0);
   }
 
   void deleteTask(
     String taskId,
     BuildContext context,
     Task task,
-    int taskIndex,
-  ) {
+    int taskIndex, [
+    bool? isStarred,
+  ]) {
     state = state.where((task) => task.id != taskId).toList();
+
+    builder(context, animation) {
+      return TaskTile(
+        animation: animation,
+        task: task,
+        taskIndex: taskIndex,
+      );
+    }
+
     ScaffoldMessenger.of(context).clearSnackBars();
     AppSnackbar(
       context: context,
@@ -63,23 +103,22 @@ class TasksNotifier extends StateNotifier<List<Task>> {
             task,
             taskIndex,
           );
+
+          if (isStarred == null) return;
+
+          if (isStarred) {
+            print("From Undo Delete");
+            _insertStarredItem(taskIndex);
+          }
         },
       ),
     ).showFeedback();
 
-    builder(context, animation) {
-      return TaskTile(
-        animation: animation,
-        task: task,
-        taskIndex: taskIndex,
-      );
+    if (isStarred != null && isStarred) {
+      _removeStarredItem(taskIndex, builder);
     }
 
-    taskListKey.currentState?.removeItem(
-      taskIndex,
-      builder,
-      duration: const Duration(milliseconds: 200),
-    );
+    _removeTask(taskIndex, builder);
   }
 
   void toggleStarredTask(
@@ -87,6 +126,8 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     int? taskIndex,
     bool? isTaskStarred,
     Task? task,
+    BuildContext? ctx,
+    bool isStarredScreen = false,
   ]) {
     state = state
         .map((task) => task.id == taskId
@@ -94,7 +135,33 @@ class TasksNotifier extends StateNotifier<List<Task>> {
             : task)
         .toList();
 
-    if (isTaskStarred != null && isTaskStarred) {
+    if (isTaskStarred == null) return;
+
+    if (!isTaskStarred) {
+      _insertStarredItem(taskIndex!);
+    } else if (isTaskStarred) {
+      if (ctx != null && isStarredScreen) {
+        ScaffoldMessenger.of(ctx).clearSnackBars();
+        AppSnackbar(
+          context: ctx,
+          variant: SnackbarVariant.SUCCESS,
+          text: "Task removed from Starred",
+          action: SnackBarAction(
+            label: "Undo",
+            textColor: const Color(0xff6ba5ed),
+            onPressed: () {
+              state = state.map((task) {
+                return task.id == taskId
+                    ? task.copyWith(isStarred: true)
+                    : task;
+              }).toList();
+
+              _insertStarredItem(taskIndex!);
+            },
+          ),
+        ).showFeedback();
+      }
+
       builder(context, animation) {
         return TaskTile(
           animation: animation,
@@ -103,11 +170,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
         );
       }
 
-      starredListKey.currentState?.removeItem(
-        taskIndex!,
-        builder,
-        duration: const Duration(milliseconds: 200),
-      );
+      _removeStarredItem(taskIndex!, builder);
     }
   }
 

@@ -19,7 +19,6 @@ class TasksScreen extends ConsumerWidget {
         ? const AppEmptyView(
             imagePath: "assets/images/task.png",
             title: "No task added",
-            text: "Add a task to get reminded",
           )
         : AnimatedList(
             key: listKey,
