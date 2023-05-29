@@ -28,7 +28,7 @@ class TaskTile extends ConsumerWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(
           vertical: 5,
-          horizontal: 16,
+          horizontal: 15,
         ),
         onTap: () {
           Navigator.of(context).push(
@@ -44,7 +44,9 @@ class TaskTile extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           width: 30,
           height: 30,
-          onTap: () {},
+          onTap: () {
+            ref.read(taskProvider.notifier).toggleCompletedTask(task.id);
+          },
           child: const Icon(
             Icons.circle_outlined,
             size: 30,

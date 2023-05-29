@@ -183,7 +183,13 @@ class TasksNotifier extends StateNotifier<List<Task>> {
         .toList();
   }
 
-  // To-Do: Implement complete task toggle
+  void toggleCompletedTask(String taskId) {
+    state = state
+        .map((task) => task.id == taskId
+            ? task.copyWith(isCompleted: !task.isCompleted)
+            : task)
+        .toList();
+  }
 }
 
 final taskProvider = StateNotifierProvider<TasksNotifier, List<Task>>((ref) {
