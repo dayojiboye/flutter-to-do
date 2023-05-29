@@ -26,7 +26,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     return completedListKey;
   }
 
-  void _insertTask(int taskIndex) {
+  void _insertTask(int taskIndex, Task task) {
     taskListKey.currentState?.insertItem(
       taskIndex,
       duration: const Duration(milliseconds: 100),
@@ -50,7 +50,9 @@ class TasksNotifier extends StateNotifier<List<Task>> {
   void _removeTask(
     int taskIndex,
     TaskTile Function(dynamic context, dynamic animation) builder,
+    Task task,
   ) {
+    if (task.isCompleted) return;
     taskListKey.currentState?.removeItem(
       taskIndex,
       builder,
@@ -85,7 +87,8 @@ class TasksNotifier extends StateNotifier<List<Task>> {
       final tempState = state.toList();
       tempState.insert(taskIndex, task);
       state = tempState;
-      _insertTask(taskIndex);
+      if (task.isCompleted) return;
+      _insertTask(taskIndex, task);
       return;
     }
 
@@ -94,7 +97,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
       ...state,
     ];
 
-    _insertTask(0);
+    _insertTask(0, task);
   }
 
   void deleteTask(
@@ -103,7 +106,6 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     Task task,
     int taskIndex, [
     bool? isStarred,
-    bool? isCompleted,
   ]) {
     state = state.where((task) => task.id != taskId).toList();
 
@@ -130,14 +132,10 @@ class TasksNotifier extends StateNotifier<List<Task>> {
             taskIndex,
           );
 
-          if (isStarred == null || isCompleted == null) return;
+          if (isStarred == null) return;
 
           if (isStarred) {
             _insertStarredTask(taskIndex);
-          }
-
-          if (isCompleted) {
-            _insertCompletedTask(taskIndex);
           }
         },
       ),
@@ -147,11 +145,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
       _removeStarredTask(taskIndex, builder);
     }
 
-    if (isCompleted != null && isCompleted) {
-      _removeCompletedTask(taskIndex, builder);
-    }
-
-    _removeTask(taskIndex, builder);
+    _removeTask(taskIndex, builder, task);
   }
 
   void toggleStarredTask(
@@ -171,7 +165,7 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     if (isTaskStarred == null) return;
 
     if (!isTaskStarred) {
-      _insertStarredTask(0);
+      _insertStarredTask(taskIndex!);
     } else if (isTaskStarred) {
       if (ctx != null && isStarredScreen) {
         ScaffoldMessenger.of(ctx).clearSnackBars();
@@ -230,19 +224,21 @@ class TasksNotifier extends StateNotifier<List<Task>> {
             : task)
         .toList();
 
+    builder(context, animation) {
+      return TaskTile(
+        animation: animation,
+        task: task,
+        taskIndex: taskIndex,
+      );
+    }
+
     if (isTaskCompleted == null) return;
 
     if (!isTaskCompleted) {
-      _insertCompletedTask(0);
+      _insertCompletedTask(taskIndex);
+      _removeTask(taskIndex, builder, task);
     } else if (isTaskCompleted) {
-      builder(context, animation) {
-        return TaskTile(
-          animation: animation,
-          task: task,
-          taskIndex: taskIndex,
-        );
-      }
-
+      _insertTask(taskIndex, task);
       _removeCompletedTask(taskIndex, builder);
     }
   }

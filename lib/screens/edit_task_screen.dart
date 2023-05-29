@@ -92,6 +92,7 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
                     editedTask,
                     widget.taskIndex,
                     editedTask.isStarred,
+                    editedTask.isCompleted,
                   );
               Navigator.of(context).pop();
             },
@@ -173,6 +174,10 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
                 onTap: () {
                   ref.read(taskProvider.notifier).toggleCompletedTask(
                         widget.task.id,
+                        widget.taskIndex,
+                        editedTask,
+                        context,
+                        editedTask.isCompleted,
                       );
                 },
               ),

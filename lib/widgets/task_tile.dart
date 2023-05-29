@@ -45,21 +45,30 @@ class TaskTile extends ConsumerWidget {
           width: 30,
           height: 30,
           onTap: () {
-            ref.read(taskProvider.notifier).toggleCompletedTask(task.id);
+            ref.read(taskProvider.notifier).toggleCompletedTask(
+                  task.id,
+                  taskIndex,
+                  task,
+                  context,
+                  task.isCompleted,
+                );
           },
-          child: const Icon(
-            Icons.circle_outlined,
+          child: Icon(
+            task.isCompleted ? Icons.check : Icons.circle_outlined,
             size: 30,
-            color: kMuted,
+            color: task.isCompleted ? kPrimaryColor : kMuted,
           ),
         ),
         title: Text(
           task.description,
-          style: const TextStyle(
+          style: TextStyle(
             color: kPrimaryTextColor,
             fontSize: 18,
             fontWeight: FontWeight.w500,
             height: 1.4,
+            decoration: task.isCompleted
+                ? TextDecoration.lineThrough
+                : TextDecoration.none,
           ),
         ),
         trailing: TouchableOpacity(

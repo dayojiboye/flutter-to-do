@@ -44,6 +44,9 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
     final GlobalKey<AnimatedListState> listKey =
         ref.watch(taskProvider.notifier).getTaskListKey;
 
+    final GlobalKey<AnimatedListState> completedListKey =
+        ref.watch(taskProvider.notifier).getCompletedListKey;
+
     return tasksList.isEmpty
         ? const AppEmptyView(
             imagePath: "assets/images/task.png",
@@ -55,20 +58,49 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AnimatedList(
-                  key: listKey,
-                  primary: false,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  initialItemCount: tasksList.length,
-                  itemBuilder: (context, index, animation) {
-                    return TaskTile(
-                      animation: animation,
-                      task: tasksList[index],
-                      taskIndex: index,
-                    );
-                  },
-                ),
+                !tasksList.any((task) => !task.isCompleted)
+                    ? Center(
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                            top: 20.0,
+                            bottom: 12.0,
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.celebration_sharp,
+                                size: 30,
+                                color: Color.fromARGB(255, 252, 166, 8),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Hurray! You have no uncompleted task",
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : AnimatedList(
+                        key: listKey,
+                        primary: false,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        initialItemCount: tasksList.length,
+                        itemBuilder: (context, index, animation) {
+                          if (tasksList[index].isCompleted) {
+                            return const SizedBox();
+                          }
+                          return TaskTile(
+                            animation: animation,
+                            task: tasksList[index],
+                            taskIndex: index,
+                          );
+                        },
+                      ),
                 const Divider(
                   color: kBorder,
                   thickness: 1.0,
@@ -79,6 +111,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                   ),
                   child: ExpansionTile(
                     key: expansionTileKey,
+                    initiallyExpanded: true,
                     childrenPadding: const EdgeInsets.only(
                       top: 12,
                       bottom: 12,
@@ -112,6 +145,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                     },
                     children: [
                       AnimatedList(
+                        key: completedListKey,
                         primary: false,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -123,7 +157,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                             animation: animation,
                           );
                         },
-                      )
+                      ),
                     ],
                   ),
                 ),
