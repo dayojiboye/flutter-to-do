@@ -162,11 +162,20 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
               );
             },
           ),
-          const Positioned(
+          Positioned(
             bottom: 24.0,
             right: 20.0,
             child: SafeArea(
-              child: AppTextButton(text: "Mark completed"),
+              child: AppTextButton(
+                text: editedTask.isCompleted
+                    ? "Mark uncompleted"
+                    : "Mark completed",
+                onTap: () {
+                  ref.read(taskProvider.notifier).toggleCompletedTask(
+                        widget.task.id,
+                      );
+                },
+              ),
             ),
           ),
         ],

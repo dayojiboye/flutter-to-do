@@ -183,6 +183,8 @@ class TasksNotifier extends StateNotifier<List<Task>> {
         .toList();
   }
 
+  // To-Do: add Global key and insert & remove completed task functions
+  // Also add snackbar and undo action for completed toggle
   void toggleCompletedTask(String taskId) {
     state = state
         .map((task) => task.id == taskId
