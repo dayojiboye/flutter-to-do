@@ -14,6 +14,9 @@ class AppTextField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.sentences,
     required this.controller,
     this.onChanged,
+    this.keyboardType = TextInputType.multiline,
+    this.minLines = 1,
+    this.maxLines = 3,
   });
 
   final Color cursorColor;
@@ -26,6 +29,9 @@ class AppTextField extends StatelessWidget {
   final TextCapitalization textCapitalization;
   final TextEditingController controller;
   final void Function(String?)? onChanged;
+  final TextInputType keyboardType;
+  final int minLines;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +40,9 @@ class AppTextField extends StatelessWidget {
       autocorrect: autoCorrect,
       cursorColor: cursorColor,
       textCapitalization: textCapitalization,
+      keyboardType: keyboardType,
+      minLines: minLines,
+      maxLines: maxLines,
       style: style,
       decoration: InputDecoration(
         hintText: hintText,

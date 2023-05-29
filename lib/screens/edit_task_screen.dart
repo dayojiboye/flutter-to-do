@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -25,10 +27,12 @@ class EditTaskScreen extends ConsumerStatefulWidget {
 
 class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
   final TextEditingController _editTaskController = TextEditingController();
+  Timer? _debounce;
 
   @override
   void dispose() {
     _editTaskController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -54,10 +58,6 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
           backgroundColor: Colors.transparent,
           width: 56.0,
           onTap: () {
-            ref.read(taskProvider.notifier).editTask(
-                  widget.task.id,
-                  _editTaskController.text.trim(),
-                );
             Navigator.of(context).pop();
           },
           child: const Icon(
@@ -130,6 +130,7 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
                       AppTextField(
                         autoFocus: false,
                         controller: _editTaskController,
+                        maxLines: 20,
                         style: const TextStyle(
                           fontSize: 30,
                         ),
@@ -138,6 +139,22 @@ class EditTaskScreenState extends ConsumerState<EditTaskScreen> {
                           color: kMuted,
                           fontSize: 30,
                         ),
+                        onChanged: (value) {
+                          if (_debounce?.isActive ?? false) _debounce!.cancel();
+                          setState(
+                            () {
+                              _debounce = Timer(
+                                const Duration(milliseconds: 500),
+                                () {
+                                  ref.read(taskProvider.notifier).editTask(
+                                        widget.task.id,
+                                        _editTaskController.text.trim(),
+                                      );
+                                },
+                              );
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),
