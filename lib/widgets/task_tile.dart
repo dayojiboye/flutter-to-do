@@ -7,7 +7,7 @@ import 'package:to_do/screens/edit_task_screen.dart';
 import 'package:to_do/utils/colors.dart';
 import 'package:to_do/widgets/touchable_opacity.dart';
 
-class TaskTile extends ConsumerWidget {
+class TaskTile extends ConsumerStatefulWidget {
   const TaskTile({
     super.key,
     this.isStarredScreen = false,
@@ -22,9 +22,16 @@ class TaskTile extends ConsumerWidget {
   final Animation<double> animation;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _TaskTileState();
+}
+
+class _TaskTileState extends ConsumerState<TaskTile> {
+  bool _showCheckmarkIcon = false;
+
+  @override
+  Widget build(BuildContext context) {
     return SizeTransition(
-      sizeFactor: animation,
+      sizeFactor: widget.animation,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(
           vertical: 5,
@@ -34,8 +41,8 @@ class TaskTile extends ConsumerWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EditTaskScreen(
-                task: task,
-                taskIndex: taskIndex,
+                task: widget.task,
+                taskIndex: widget.taskIndex,
               ),
             ),
           );
@@ -45,28 +52,52 @@ class TaskTile extends ConsumerWidget {
           width: 30,
           height: 30,
           onTap: () {
+            if (!widget.task.isCompleted) {
+              setState(() {
+                _showCheckmarkIcon = true;
+              });
+            } else {
+              setState(() {
+                _showCheckmarkIcon = false;
+              });
+            }
+
             ref.read(taskProvider.notifier).toggleCompletedTask(
-                  task.id,
-                  taskIndex,
-                  task,
+                  widget.task.id,
+                  widget.taskIndex,
+                  widget.task,
                   context,
-                  task.isCompleted,
+                  widget.task.isCompleted,
                 );
           },
-          child: Icon(
-            task.isCompleted ? Icons.check : Icons.circle_outlined,
-            size: 30,
-            color: task.isCompleted ? kPrimaryColor : kMuted,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            transitionBuilder: (child, animation) {
+              return ScaleTransition(scale: animation, child: child);
+            },
+            child: _showCheckmarkIcon || widget.task.isCompleted
+                ? Icon(
+                    key: ValueKey(_showCheckmarkIcon),
+                    Icons.check_sharp,
+                    size: 30,
+                    color: kPrimaryColor,
+                  )
+                : Icon(
+                    key: ValueKey(_showCheckmarkIcon),
+                    Icons.circle_outlined,
+                    size: 30,
+                    color: kMuted,
+                  ),
           ),
         ),
         title: Text(
-          task.description,
+          widget.task.description,
           style: TextStyle(
             color: kPrimaryTextColor,
             fontSize: 18,
             fontWeight: FontWeight.w500,
             height: 1.4,
-            decoration: task.isCompleted
+            decoration: widget.task.isCompleted
                 ? TextDecoration.lineThrough
                 : TextDecoration.none,
           ),
@@ -78,18 +109,18 @@ class TaskTile extends ConsumerWidget {
           onTap: () {
             HapticFeedback.lightImpact();
             ref.read(taskProvider.notifier).toggleStarredTask(
-                  task.id,
-                  taskIndex,
-                  task.isStarred,
-                  task,
+                  widget.task.id,
+                  widget.taskIndex,
+                  widget.task.isStarred,
+                  widget.task,
                   context,
-                  isStarredScreen,
+                  widget.isStarredScreen,
                 );
           },
           child: Icon(
-            task.isStarred ? Icons.star_outlined : Icons.star_outline,
+            widget.task.isStarred ? Icons.star_outlined : Icons.star_outline,
             size: 30,
-            color: task.isStarred ? kPrimaryColor : kMuted,
+            color: widget.task.isStarred ? kPrimaryColor : kMuted,
           ),
         ),
       ),

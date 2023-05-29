@@ -111,7 +111,6 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                   ),
                   child: ExpansionTile(
                     key: expansionTileKey,
-                    initiallyExpanded: true,
                     childrenPadding: const EdgeInsets.only(
                       top: 12,
                       bottom: 12,

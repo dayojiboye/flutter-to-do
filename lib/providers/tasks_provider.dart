@@ -224,16 +224,26 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     bool? isTaskCompleted,
     bool isStarredScreen = false,
   ]) {
-    state = state
-        .map((task) => task.id == taskId
-            ? task.copyWith(isCompleted: !task.isCompleted)
-            : task)
-        .toList();
+    Future.delayed(
+      const Duration(
+        milliseconds: 600,
+      ),
+      () => state = state
+          .map((task) => task.id == taskId
+              ? task.copyWith(isCompleted: !task.isCompleted)
+              : task)
+          .toList(),
+    );
 
     if (isTaskCompleted == null) return;
 
     if (!isTaskCompleted) {
-      _insertCompletedTask(0);
+      Future.delayed(
+        const Duration(
+          milliseconds: 600,
+        ),
+        () => _insertCompletedTask(0),
+      );
     } else if (isTaskCompleted) {
       builder(context, animation) {
         return TaskTile(
