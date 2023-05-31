@@ -26,8 +26,6 @@ class TaskTile extends ConsumerStatefulWidget {
 }
 
 class _TaskTileState extends ConsumerState<TaskTile> {
-  bool _showCheckmarkIcon = false;
-
   @override
   Widget build(BuildContext context) {
     return SizeTransition(
@@ -52,16 +50,6 @@ class _TaskTileState extends ConsumerState<TaskTile> {
           width: 30,
           height: 30,
           onTap: () {
-            if (!widget.task.isCompleted) {
-              setState(() {
-                _showCheckmarkIcon = true;
-              });
-            } else {
-              setState(() {
-                _showCheckmarkIcon = false;
-              });
-            }
-
             ref.read(taskProvider.notifier).toggleCompletedTask(
                   widget.task.id,
                   widget.taskIndex,
@@ -75,19 +63,13 @@ class _TaskTileState extends ConsumerState<TaskTile> {
             transitionBuilder: (child, animation) {
               return ScaleTransition(scale: animation, child: child);
             },
-            child: _showCheckmarkIcon || widget.task.isCompleted
-                ? Icon(
-                    key: ValueKey(_showCheckmarkIcon),
-                    Icons.check_sharp,
-                    size: 30,
-                    color: kPrimaryColor,
-                  )
-                : Icon(
-                    key: ValueKey(_showCheckmarkIcon),
-                    Icons.circle_outlined,
-                    size: 30,
-                    color: kMuted,
-                  ),
+            child: Icon(
+              widget.task.isCompleted
+                  ? Icons.check_sharp
+                  : Icons.circle_outlined,
+              size: 30,
+              color: widget.task.isCompleted ? kPrimaryColor : kMuted,
+            ),
           ),
         ),
         title: Text(
